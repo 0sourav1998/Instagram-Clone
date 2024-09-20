@@ -26,5 +26,5 @@ export const useSetUserProfile = ()=>{
     }
     useEffect(()=>{
         fetchUserProfile();
-    },[])
+    },[id])
 }

@@ -5,7 +5,8 @@ export const authEndpoints = {
     SIGNUP : `${BASE_URL}/api/v1/user/register`,
     LOGIN : `${BASE_URL}/api/v1/user/login` ,
     SUGGESTED_USER : `${BASE_URL}/api/v1/user/suggestedUser` ,
-    GET_PROFILE : `${BASE_URL}/api/v1/user/getProfile`
+    GET_PROFILE : `${BASE_URL}/api/v1/user/getProfile`,
+    EDIT_PROFILE : `${BASE_URL}/api/v1/user/editProfile`
 }
 
 export const postEndpoints = {

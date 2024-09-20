@@ -7,6 +7,7 @@ import LeftSidebar from "./components/LeftSidebar";
 import MainComponent from "./components/MainComponent";
 import UserStories from "./components/UserStories";
 import Profile from "./components/Profile";
+import EditProfile from "./components/EditProfile";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
           <Route element={<Home/>} path="/"/>
           <Route element={<UserStories />} path="stories" />
           <Route element={<Profile/>} path="/profile/:id" />
+          <Route element={<EditProfile/>} path="/profile/edit/:id"/>
         </Route>
       </Routes>
     </div>

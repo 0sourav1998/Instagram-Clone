@@ -3,7 +3,7 @@ import { apiConnector } from "../apiConnector";
 import { authEndpoints } from "../apis";
 import { setToken } from "@/redux/slice/userSlice";
 
-const {SIGNUP,LOGIN} = authEndpoints ;
+const {SIGNUP,LOGIN,EDIT_PROFILE} = authEndpoints ;
 
 export const SignupOperation = async(body,navigate)=>{
         try {
@@ -23,4 +23,17 @@ export const LoginOperation = async(body)=>{
         } catch (error) {
             toast.error(error?.response?.data?.message)
         }
+}
+
+export const editProfile = async(body,token)=>{
+    try {
+        const response = await apiConnector("PUT",EDIT_PROFILE,body,{
+            Authorization : `Bearer ${token}`
+        }) ;
+        if(response?.data?.success){
+            return response ;
+        }
+    } catch (error) {
+        console.log(error.message)
+    }
 }

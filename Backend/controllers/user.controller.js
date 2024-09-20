@@ -107,7 +107,7 @@ exports.login = async (req, res) => {
 exports.getProfile = async (req, res) => {
   try {
     const { userId } = req.body;
-    const user = await User.findById(userId).select("-password");
+    const user = await User.findById(userId).select("-password").populate("posts").populate("bookmarks");
     return res.status(200).json({
       success: true,
       user,
@@ -120,7 +120,6 @@ exports.getProfile = async (req, res) => {
 exports.editProfile = async (req, res) => {
   try {
     const { bio, gender } = req.body;
-    const profilePhoto = req.files.file;
     const userId = req.userId;
     const user = await User.findById(userId);
     if (!user) {
@@ -129,7 +128,8 @@ exports.editProfile = async (req, res) => {
         message: "User Not Found",
       });
     }
-    if (profilePhoto) {
+    if (req?.files) {
+      const profilePhoto = req.files.file;
       const cloudinaryResponse = await uploadFileToCloudinary(
         profilePhoto,
         process.env.FOLDER_NAME
@@ -146,6 +146,7 @@ exports.editProfile = async (req, res) => {
     return res.status(201).json({
       success: true,
       message: "Profile Edited Successfully",
+      user ,
     });
   } catch (error) {
     console.log(error);
