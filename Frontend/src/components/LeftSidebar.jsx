@@ -41,6 +41,9 @@ const LeftSidebar = () => {
     if(text === "Profile"){
       navigate(`/profile/${user.id}`)
     }
+    if(text === "Messages"){
+      navigate("/chat")
+    }
   };
   const leftSidebar = [
     { icon: <Home />, text: "Home" },

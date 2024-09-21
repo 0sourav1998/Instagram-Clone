@@ -1,5 +1,4 @@
 const express = require("express");
-const app = express();
 require("dotenv").config();
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
@@ -9,6 +8,7 @@ const userRouter = require("../Backend/routes/user.route")
 const postRoute = require("../Backend/routes/post.route");
 const messageRoute = require("../Backend/routes/message.route")
 const fileUpload = require("express-fileupload")
+const {app,server} = require("./socket/socket")
 
 app.use(express.json());
 app.use(express.urlencoded({extended : true}));
@@ -32,6 +32,6 @@ app.use("/api/v1/message",messageRoute)
 
 const PORT = process.env.PORT || 4000 ;
 
-app.listen(PORT,()=>{
+server.listen(PORT,()=>{
     console.log(`App is Listening to PORT : ${PORT}`)
 })

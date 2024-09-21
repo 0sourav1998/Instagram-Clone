@@ -121,14 +121,14 @@ const EditProfile = () => {
             type="text"
             placeholder="Enter Your Bio here..."
             rows={4}
-            className="border p-2 focus-within:bg-blue-100"
+            className="p-2 border focus:outline-none"
           />
         </div>
         <div className="flex flex-col gap-y-3">
           <h1 className="font-bold text-xl">Gender</h1>
           <select
             value={input.gender}
-            className="border border-blue-500 p-2"
+            className="border border-blue-500 focus:outline-none p-2"
             onChange={handleSelectHandle}
           >
             <option value="">--Select Your Gender--</option>
