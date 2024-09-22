@@ -16,3 +16,7 @@ export const postEndpoints = {
     LIKE_DISLIKE :`${BASE_URL}/api/v1/post/likeOrDislikePost`,
     COMMENT_ON_POSTS : `${BASE_URL}/api/v1/post/addComment`
 }
+
+export const messageEndpoints = {
+    GET_ALL_MESSAGES : `${BASE_URL}/api/v1/message/getMessages`
+}

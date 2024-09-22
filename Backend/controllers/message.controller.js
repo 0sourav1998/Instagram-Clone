@@ -1,10 +1,13 @@
 const Conversation = require("../models/conversation.model");
 const Message = require("../models/message.model");
+const { getSocketId, io } = require("../socket/socket");
 
 exports.sendMessage = async (req, res) => {
   try {
+    console.log("inside this")
     const senderId = req.userId;
     const { receiverId, message } = req?.body;
+    console.log(receiverId,message)
     if (!receiverId || !message) {
       return res.status(404).json({
         success: false,
@@ -25,11 +28,18 @@ exports.sendMessage = async (req, res) => {
       message,
     });
 
-    conversation.message.push(newMessage._id);
+    console.log(conversation);
+    console.log(newMessage)
+
+    conversation.messages.push(newMessage._id);
 
     await Promise.all([conversation.save(), newMessage.save()]);
 
     //socket io
+    const receiverSocketId = getSocketId(receiverId);
+    if(receiverId){
+      io.to(receiverSocketId).emit("newMsg",newMessage)
+    }
 
     return res.status(200).json({
         success : true ,
@@ -49,9 +59,10 @@ exports.getMessage = async(req,res)=>{
     try {
         const senderId = req.userId ;
         const {receiverId} = req.body;
+        console.log(senderId,receiverId)
 
         const conversation = await Conversation.findOne({
-            participants : [senderId,receiverId]
+            participants : { $all : [senderId,receiverId]}
         }).populate("messages") ;
 
         if(!conversation){
@@ -60,6 +71,7 @@ exports.getMessage = async(req,res)=>{
                 messages : [] 
             })
         }
+        console.log("COnversation",conversation)
         return res.status(200).json({
             success : true ,
             message : "Messages Fetched Successfully" ,

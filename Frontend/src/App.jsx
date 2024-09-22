@@ -17,7 +17,8 @@ import { setOnlineUser } from "./redux/slice/chatSlice";
 
 function App() {
   const { user } = useSelector((state) => state.user);
-  const {onlineUser} = useSelector((state)=>state?.chat)
+  const {onlineUser} = useSelector((state)=>state?.chat);
+  const {socket} = useSelector((state)=>state.socket)
   const dispatch = useDispatch();
   useEffect(() => {
     if (user) {
@@ -32,13 +33,15 @@ function App() {
         console.log("Socket connected:", socket_io.id);
       });
       socket_io.on("getOnlineUsers", (user) => {
-        dispatch(setOnlineUser([...onlineUser,user]));
+        console.log("USER",user)
+        dispatch(setOnlineUser(user));
       });
       return () => {
-        socket_io.close();
+        socket_io?.close();
         dispatch(setSocket(null));
       };
     } else {
+      socket?.close();
       dispatch(setSocket(null));
     }
   }, [user, dispatch]);

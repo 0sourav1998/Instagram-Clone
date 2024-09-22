@@ -1,4 +1,4 @@
-import { setToken } from "@/redux/slice/userSlice";
+import { setToken, setUser } from "@/redux/slice/userSlice";
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import {
   Heart,
@@ -23,6 +23,7 @@ const LeftSidebar = () => {
   console.log(open);
   const { user } = useSelector((state) => state.user);
   const handleLogout = () => {
+    dispatch(setUser(null));
     dispatch(setToken(null));
     dispatch(setToken(null));
     navigate("/login");

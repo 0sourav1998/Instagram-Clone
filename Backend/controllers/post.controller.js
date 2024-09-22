@@ -1,6 +1,7 @@
 const Comment = require("../models/comment.model");
 const Post = require("../models/post.model");
 const User = require("../models/user.model");
+const { io, getSocketId } = require("../socket/socket");
 const { uploadFileToCloudinary } = require("../utils/uploadFileToCloudinary");
 require("dotenv").config()
 
@@ -81,17 +82,45 @@ exports.likedPost = async(req,res)=>{
         }
         if(post.likes.includes(userId)){
             await Post.findByIdAndUpdate(postId , { $pull : { likes : userId}})
+            const user = await User.findById(userId).select("photo username");
+            if(user._id !== post?.author.toString()){
+                const notification = {
+                    type : "Disliked",
+                    userDetails : user , 
+                    postId ,
+                    userId ,
+                    message : "You Post Was Dis-Liked"
+                } 
+                const postOwnerSocketId = getSocketId(post?.author.toString());
+                if(postOwnerSocketId){
+                    io.to(postOwnerSocketId).emit("notification",notification)
+                }
+            }
             return res.status(200).json({
                 success : true ,
                 message : "Like Removed"
             })
         }else{
-            await Post.findByIdAndUpdate(postId , { $push : { likes : userId}})
+            await Post.findByIdAndUpdate(postId , { $push : { likes : userId}}) ;
+            //socket io implementation
+            const user = await User.findById(userId).select("photo username");
+            if(user._id !== post?.author.toString()){
+                const notification = {
+                    type : "Liked",
+                    userDetails : user , 
+                    postId ,
+                    userId ,
+                    message : "You Post Was Liked"
+                } 
+                const postOwnerSocketId = getSocketId(post?.author.toString());
+                if(postOwnerSocketId){
+                    io.to(postOwnerSocketId).emit("notification",notification)
+                }
+            }
             return res.status(200).json({
                 success : true ,
                 message : "Liked"
             })
-            //socket io implementation
         }
     } catch (error) {
         return res.status(400).json({

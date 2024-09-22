@@ -6,7 +6,9 @@ import { Button } from "./ui/button";
 import { Link } from "react-router-dom";
 
 const Messages = () => {
+  const {messages} = useSelector((state)=>state.chat);
   const { selectedUser } = useSelector((state) => state.chat);
+  const {user} = useSelector((state)=>state.user);
   return (
     <div className="">
       <div className="flex flex-col gap-2 items-center mt-5">
@@ -23,6 +25,18 @@ const Messages = () => {
             View Profile
           </Button>
         </Link>
+      </div>
+      <div className="max-h-[30vh] mt-4">
+        {
+          messages && messages?.map((msg)=>(
+            
+            <div key={msg._id} className={`flex gap-1 max-w-full ${msg?.senderId === user.id ? "justify-end" : "justify-start"}`}>
+              <div className={`p-3 m-2 mb-2 w-fit break-words rounded-xl ${msg?.senderId === user.id ? "bg-blue-500 text-white" : "bg-gray-200 text-black"}`}>
+                {msg.message}
+              </div>
+            </div>
+          ))
+        }
       </div>
     </div>
   );
